@@ -32,6 +32,7 @@ typedef enum videotype {
 
 typedef struct metadata_s {
 	char *       title;
+	char *       sort_title;
 	char *       artist;
 	char *       creator;
 	char *       publisher;

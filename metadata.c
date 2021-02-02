@@ -63,7 +63,7 @@
 #define FLAG_TRACK       0x00004000
 #define FLAG_DISC        0x00008000
 #define FLAG_PUBLISHER   0x00010000
-
+#define FLAG_SORT_TITLE  0x00020000
 #define ALL_FLAGS        0xFFFFFFFF
 
 /* Audio profile flags */
@@ -272,6 +272,7 @@ parse_movie_nfo(struct NameValueParserData *xml, metadata_t *m)
 	if (strcmp("movie", GetValueFromNameValueList(xml, "rootElement")) != 0) return;
 
 	set_value_from_xml_if_exists(&m->title, xml, "title");
+	set_value_from_xml_if_exists(&m->sort_title, xml, "sorttitle");
 	set_value_from_xml_if_exists(&m->date, xml, "year");
 	set_value_from_xml_if_exists(&m->date, xml, "premiered");
 	set_value_from_xml_if_exists(&m->comment, xml, "tagline");
@@ -439,12 +440,12 @@ add_entry_to_details(const char *path, off_t entry_size, time_t entry_timestamp,
 {
 	int ret = sql_exec(db, "INSERT into DETAILS"
 	                       " (PATH, SIZE, TIMESTAMP, DURATION, DATE, CHANNELS, BITRATE, SAMPLERATE, RESOLUTION,"
-	                       "  TITLE, CREATOR, PUBLISHER, AUTHOR, ARTIST, GENRE, COMMENT, DESCRIPTION, RATING,"
+	                       "  TITLE, SORT_TITLE, CREATOR, PUBLISHER, AUTHOR, ARTIST, GENRE, COMMENT, DESCRIPTION, RATING,"
 	                       "  ALBUM, TRACK, DISC, DLNA_PN, MIME, ALBUM_ART, VIDEO_TYPE) "
 	                       "VALUES"
 	                       " (%Q, %lld, %lld, %Q, %Q, %u, %u, %u, %Q, %Q, %Q, %Q, %Q, %Q, %Q, %Q, %Q, %Q, %Q, %u, %u, %Q, %Q, %lld, %d);",
 	                       path, (long long)entry_size, (long long)entry_timestamp, m->duration, m->date, m->channels, m->bitrate, m->frequency, m->resolution,
-	                       m->title, m->creator, m->publisher, m->author, m->artist, m->genre, m->comment, m->description, m->rating,
+	                       m->title, m->sort_title, m->creator, m->publisher, m->author, m->artist, m->genre, m->comment, m->description, m->rating,
 	                       m->album, m->track, m->disc, m->dlna_pn, m->mime, (long long)album_art_id, (int)m->videotype);
 
 	if (ret != SQLITE_OK)
@@ -464,10 +465,10 @@ update_entry_in_details(const char *path, metadata_t *m, int64_t detailID)
 {
 	int ret = sql_exec(db, "UPDATE DETAILS set"
 		" DATE=%Q, CHANNELS=%u, BITRATE=%u, SAMPLERATE=%u, RESOLUTION=%Q,"
-		" TITLE=%Q, CREATOR=%Q, PUBLISHER=%Q, AUTHOR=%Q, ARTIST=%Q, GENRE=%Q, COMMENT=%Q, DESCRIPTION=%Q, RATING=%Q,"
+		" TITLE=%Q, SORT_TITLE=%Q, CREATOR=%Q, PUBLISHER=%Q, AUTHOR=%Q, ARTIST=%Q, GENRE=%Q, COMMENT=%Q, DESCRIPTION=%Q, RATING=%Q,"
 		" ALBUM=%Q, TRACK=%u, DISC=%u, DLNA_PN=%Q, MIME=%Q, VIDEO_TYPE=%u where ID=%lld",
 		m->date, m->channels, m->bitrate, m->frequency, m->resolution,
-		m->title, m->creator, m->publisher, m->author, m->artist, m->genre, m->comment, m->description, m->rating,
+		m->title, m->sort_title, m->creator, m->publisher, m->author, m->artist, m->genre, m->comment, m->description, m->rating,
 		m->album, m->track, m->disc, m->dlna_pn, m->mime, m->videotype, detailID);
 
 	if (ret != SQLITE_OK)
@@ -517,6 +518,8 @@ free_metadata(metadata_t *m, uint32_t flags)
 		free(m->duration);
 	if( flags & FLAG_RESOLUTION )
 		free(m->resolution);
+	if( flags & FLAG_SORT_TITLE )
+		free(m->sort_title);
 }
 
 int64_t
@@ -527,7 +530,7 @@ GetNfoMetadata(const char *path, int64_t detailID)
 	int nrows;
 	char **result;
 
-	char * sql = sqlite3_mprintf("SELECT d.TITLE, d.ARTIST, d.CREATOR, d.PUBLISHER, d.AUTHOR, d.ALBUM, d.GENRE, d.COMMENT, "
+	char * sql = sqlite3_mprintf("SELECT d.TITLE, d.SORT_TITLE, d.ARTIST, d.CREATOR, d.PUBLISHER, d.AUTHOR, d.ALBUM, d.GENRE, d.COMMENT, "
 		"d.DESCRIPTION, d.RATING, d.DISC, d.TRACK, d.CHANNELS, d.BITRATE, d.SAMPLERATE, d.ROTATION, d.RESOLUTION, "
 		"d.DURATION, d.DATE, d.MIME, d.DLNA_PN from DETAILS d WHERE d.ID=%lld", detailID);
 
@@ -536,26 +539,27 @@ GetNfoMetadata(const char *path, int64_t detailID)
 		if (nrows == 1)
 		{
 			assign_value_if_exists(&m.title, result[21]);
-			assign_value_if_exists(&m.artist, result[22]);
-			assign_value_if_exists(&m.creator, result[23]);
-			assign_value_if_exists(&m.publisher, result[24]);
-			assign_value_if_exists(&m.author, result[25]);
-			assign_value_if_exists(&m.album, result[26]);
-			assign_value_if_exists(&m.genre, result[27]);
-			assign_value_if_exists(&m.comment, result[28]);
-			assign_value_if_exists(&m.description, result[29]);
-			assign_value_if_exists(&m.rating, result[30]);
-			assign_integer_if_exists(&m.disc, result[31]);
-			assign_integer_if_exists(&m.track, result[32]);
-			assign_integer_if_exists(&m.channels, result[33]);
-			assign_integer_if_exists(&m.bitrate, result[34]);
-			assign_integer_if_exists(&m.frequency, result[35]);
-			assign_integer_if_exists(&m.rotation, result[36]);
-			assign_value_if_exists(&m.resolution, result[37]);
-			assign_value_if_exists(&m.duration, result[38]);
-			assign_value_if_exists(&m.date, result[39]);
-			assign_value_if_exists(&m.mime, result[40]);
-			assign_value_if_exists(&m.dlna_pn, result[41]);
+			assign_value_if_exists(&m.sort_title, result[22]);
+			assign_value_if_exists(&m.artist, result[23]);
+			assign_value_if_exists(&m.creator, result[24]);
+			assign_value_if_exists(&m.publisher, result[25]);
+			assign_value_if_exists(&m.author, result[26]);
+			assign_value_if_exists(&m.album, result[27]);
+			assign_value_if_exists(&m.genre, result[28]);
+			assign_value_if_exists(&m.comment, result[29]);
+			assign_value_if_exists(&m.description, result[30]);
+			assign_value_if_exists(&m.rating, result[31]);
+			assign_integer_if_exists(&m.disc, result[32]);
+			assign_integer_if_exists(&m.track, result[33]);
+			assign_integer_if_exists(&m.channels, result[34]);
+			assign_integer_if_exists(&m.bitrate, result[35]);
+			assign_integer_if_exists(&m.frequency, result[36]);
+			assign_integer_if_exists(&m.rotation, result[37]);
+			assign_value_if_exists(&m.resolution, result[38]);
+			assign_value_if_exists(&m.duration, result[39]);
+			assign_value_if_exists(&m.date, result[40]);
+			assign_value_if_exists(&m.mime, result[41]);
+			assign_value_if_exists(&m.dlna_pn, result[42]);
 		}
 		sqlite3_free_table(result);
 	} else
@@ -1723,7 +1727,9 @@ GetVideoMetadata(const char *path, char *name, const char *parentID)
 			if( video.title && *video.title )
 			{
 				m.title = escape_tag(trim(video.title), 1);
+				m.sort_title = escape_tag(trim(video.title), 1);
 			}
+			// TODO Set Metadata sort title.
 			if( video.genre && *video.genre )
 			{
 				m.genre = escape_tag(trim(video.genre), 1);
@@ -1756,12 +1762,16 @@ GetVideoMetadata(const char *path, char *name, const char *parentID)
 		{
 			AVDictionaryEntry *tag = NULL;
 
-			//DEBUG DPRINTF(E_DEBUG, L_METADATA, "Metadata:\n");
+			DPRINTF(E_DEBUG, L_METADATA, "Metadata:\n");
 			while( (tag = av_dict_get(ctx->metadata, "", tag, AV_DICT_IGNORE_SUFFIX)) )
 			{
-				//DEBUG DPRINTF(E_DEBUG, L_METADATA, "  %-16s: %s\n", tag->key, tag->value);
+				DPRINTF(E_DEBUG, L_METADATA, "  %-16s: %s\n", tag->key, tag->value);
 				if( strcmp(tag->key, "title") == 0 )
+				{
 					m.title = escape_tag(trim(tag->value), 1);
+					m.sort_title = escape_tag(trim(tag->value), 1);
+				}
+				// TODO Set Metadata sort title.
 				else if( strcmp(tag->key, "genre") == 0 )
 					m.genre = escape_tag(trim(tag->value), 1);
 				else if( strcmp(tag->key, "artist") == 0 )
@@ -1820,7 +1830,10 @@ video_no_dlna:
 	}
 
 	if( !m.title )
+	{
 		m.title = strdup(name);
+		m.sort_title = strdup(name);
+	}
 
 	album_art = find_album_art(path, m.thumb_data, m.thumb_size);
 	freetags(&video);
