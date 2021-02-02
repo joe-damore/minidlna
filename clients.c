@@ -249,14 +249,14 @@ struct client_type_s client_types[] =
 
 	{ EStandardDLNA150,
 	  FLAG_DLNA | FLAG_FORCE_SORT | FLAG_MIME_AVI_AVI,
-	  "Generic DLNA 1.5",
+	  "Generic DLNA 1.5 (Test Deploy)",
 	  "DLNADOC/1.50",
 	  EUserAgent
 	},
 
 	{ EStandardUPnP,
 	  FLAG_FORCE_SORT,
-	  "Generic UPnP 1.0",
+	  "Generic UPnP 1.0 (Test Deploy)",
 	  "UPnP/1.0",
 	  EUserAgent
 	},
