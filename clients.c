@@ -32,23 +32,37 @@ struct client_type_s client_types[] =
 	  EMatchNone
 	},
 
-	{ EXbox,
+	{ EXbox360,
 	  FLAG_MIME_AVI_AVI | FLAG_MS_PFS,
 	  "Xbox 360",
 	  "Xbox/",
 	  EUserAgent
 	},
 
+	{ EXboxOne,
+	  FLAG_DLNA | FLAG_FORCE_SORT | FLAG_MIME_AVI_AVI,
+	  "Xbox One",
+	  "XboxOne",
+	  EFriendlyName
+	},
+
+	{ EPS4,
+	  FLAG_DLNA | FLAG_FORCE_SORT | FLAG_MIME_AVI_AVI,
+	  "PlayStation 4",
+	  "PlayStation 4",
+	  EUserAgent
+	},
+
 	{ EPS3,
 	  FLAG_DLNA | FLAG_MIME_AVI_DIVX,
-	  "PLAYSTATION 3",
+	  "PlayStation 3",
 	  "PLAYSTATION",
 	  EUserAgent
 	},
 
 	{ EPS3,
 	  FLAG_DLNA | FLAG_MIME_AVI_DIVX,
-	  "PLAYSTATION 3",
+	  "PlayStation 3",
 	  "PLAYSTATION 3",
 	  EXAVClientInfo
 	},
@@ -237,6 +251,27 @@ struct client_type_s client_types[] =
 	  FLAG_CAPTION_RES,
 	  "BubbleUPnP",
 	  "BubbleUPnP",
+	  EUserAgent
+	},
+
+	{ EMovian,
+	  FLAG_CAPTION_RES,
+	  "Movian",
+	  "Movian",
+	  EUserAgent
+	},
+
+	{ EKodi,
+	  FLAG_DLNA | FLAG_MIME_AVI_AVI | FLAG_CAPTION_RES,
+	  "Kodi",
+	  "Kodi",
+	  EUserAgent
+	},
+
+	{ EVLC,
+	  0,
+	  "VLC Media Player",
+	  "LibVLC",
 	  EUserAgent
 	},
 

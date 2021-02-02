@@ -51,8 +51,10 @@ enum match_types {
 };
 
 enum client_types {
-	EXbox = 1,
+	EXbox360 = 1,
+	EXboxOne,
 	EPS3,
+	EPS4,
 	EDenonReceiver,
 	EDirecTV,
 	EFreeBox,
@@ -76,6 +78,9 @@ enum client_types {
 	EAsusOPlay,
 	EBubbleUPnP,
 	ENetFrontLivingConnect,
+	EKodi,
+	EMovian,
+	EVLC,
 	EStandardDLNA150,
 	EStandardUPnP
 };
