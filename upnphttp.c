@@ -920,7 +920,7 @@ ProcessHttpQuery_upnphttp(struct upnphttp * h)
 		if(strcmp(ROOTDESC_PATH, HttpUrl) == 0)
 		{
 			/* If it's a Xbox360, we might need a special friendly_name to be recognized */
-			if( h->req_client && h->req_client->type->type == EXbox )
+			if( h->req_client && h->req_client->type->type == EXbox360 )
 			{
 				char model_sav[2];
 				i = 0;
