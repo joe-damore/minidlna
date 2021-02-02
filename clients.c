@@ -282,6 +282,13 @@ struct client_type_s client_types[] =
 	  EUserAgent
 	},
 
+	{  ERoku,
+	   0,
+	   "Roku",
+	   "Roku/",
+	   EUserAgent
+	},
+
 	{ EStandardDLNA150,
 	  FLAG_DLNA | FLAG_MIME_AVI_AVI,
 	  "Generic DLNA 1.5",
