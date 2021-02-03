@@ -40,14 +40,14 @@ struct client_type_s client_types[] =
 	},
 
 	{ EXboxOne,
-	  FLAG_DLNA | FLAG_FORCE_SORT | FLAG_MIME_AVI_AVI,
+	  FLAG_DLNA | FLAG_MIME_AVI_AVI,
 	  "Xbox One",
 	  "XboxOne",
 	  EFriendlyName
 	},
 
 	{ EPS4,
-	  FLAG_DLNA | FLAG_FORCE_SORT | FLAG_MIME_AVI_AVI,
+	  FLAG_DLNA | FLAG_MIME_AVI_AVI,
 	  "PlayStation 4",
 	  "PlayStation 4",
 	  EUserAgent
