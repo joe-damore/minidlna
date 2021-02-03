@@ -538,28 +538,28 @@ GetNfoMetadata(const char *path, int64_t detailID)
 	{
 		if (nrows == 1)
 		{
-			assign_value_if_exists(&m.title, result[21]);
-			assign_value_if_exists(&m.sort_title, result[22]);
-			assign_value_if_exists(&m.artist, result[23]);
-			assign_value_if_exists(&m.creator, result[24]);
-			assign_value_if_exists(&m.publisher, result[25]);
-			assign_value_if_exists(&m.author, result[26]);
-			assign_value_if_exists(&m.album, result[27]);
-			assign_value_if_exists(&m.genre, result[28]);
-			assign_value_if_exists(&m.comment, result[29]);
-			assign_value_if_exists(&m.description, result[30]);
-			assign_value_if_exists(&m.rating, result[31]);
-			assign_integer_if_exists(&m.disc, result[32]);
-			assign_integer_if_exists(&m.track, result[33]);
-			assign_integer_if_exists(&m.channels, result[34]);
-			assign_integer_if_exists(&m.bitrate, result[35]);
-			assign_integer_if_exists(&m.frequency, result[36]);
-			assign_integer_if_exists(&m.rotation, result[37]);
-			assign_value_if_exists(&m.resolution, result[38]);
-			assign_value_if_exists(&m.duration, result[39]);
-			assign_value_if_exists(&m.date, result[40]);
-			assign_value_if_exists(&m.mime, result[41]);
-			assign_value_if_exists(&m.dlna_pn, result[42]);
+			assign_value_if_exists(&m.title, result[22]);
+			assign_value_if_exists(&m.sort_title, result[23]);
+			assign_value_if_exists(&m.artist, result[24]);
+			assign_value_if_exists(&m.creator, result[25]);
+			assign_value_if_exists(&m.publisher, result[26]);
+			assign_value_if_exists(&m.author, result[27]);
+			assign_value_if_exists(&m.album, result[28]);
+			assign_value_if_exists(&m.genre, result[29]);
+			assign_value_if_exists(&m.comment, result[30]);
+			assign_value_if_exists(&m.description, result[31]);
+			assign_value_if_exists(&m.rating, result[32]);
+			assign_integer_if_exists(&m.disc, result[33]);
+			assign_integer_if_exists(&m.track, result[34]);
+			assign_integer_if_exists(&m.channels, result[35]);
+			assign_integer_if_exists(&m.bitrate, result[36]);
+			assign_integer_if_exists(&m.frequency, result[37]);
+			assign_integer_if_exists(&m.rotation, result[38]);
+			assign_value_if_exists(&m.resolution, result[39]);
+			assign_value_if_exists(&m.duration, result[40]);
+			assign_value_if_exists(&m.date, result[41]);
+			assign_value_if_exists(&m.mime, result[42]);
+			assign_value_if_exists(&m.dlna_pn, result[43]);
 		}
 		sqlite3_free_table(result);
 	} else
