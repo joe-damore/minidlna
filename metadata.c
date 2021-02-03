@@ -1730,6 +1730,7 @@ GetVideoMetadata(const char *path, char *name, const char *parentID)
 				m.sort_title = escape_tag(trim(video.title), 1);
 			}
 			// TODO Set Metadata sort title.
+			// Key is "sort_name".
 			if( video.genre && *video.genre )
 			{
 				m.genre = escape_tag(trim(video.genre), 1);
