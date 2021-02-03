@@ -1729,10 +1729,11 @@ GetVideoMetadata(const char *path, char *name, const char *parentID)
 				m.title = escape_tag(trim(video.title), 1);
 				m.sort_title = escape_tag(trim(video.title), 1);
 			}
-			if( video.sort_name && *video.sort_name )
-			{
-				m.sort_title = escape_tag(trim(video.sort_name), 1);
-			}
+			// TODO Restore sort name retrieval from tags.
+//			if( video.sort_name && *video.sort_name )
+//			{
+//				m.sort_title = escape_tag(trim(video.sort_name), 1);
+//			}
 			if( video.genre && *video.genre )
 			{
 				m.genre = escape_tag(trim(video.genre), 1);
