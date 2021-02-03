@@ -1729,11 +1729,7 @@ GetVideoMetadata(const char *path, char *name, const char *parentID)
 				m.title = escape_tag(trim(video.title), 1);
 				m.sort_title = escape_tag(trim(video.title), 1);
 			}
-			// TODO Restore sort name retrieval from tags.
-//			if( video.sort_name && *video.sort_name )
-//			{
-//				m.sort_title = escape_tag(trim(video.sort_name), 1);
-//			}
+			// TODO Add sort title retrieval from ASF tags.
 			if( video.genre && *video.genre )
 			{
 				m.genre = escape_tag(trim(video.genre), 1);
@@ -1775,6 +1771,8 @@ GetVideoMetadata(const char *path, char *name, const char *parentID)
 					m.title = escape_tag(trim(tag->value), 1);
 					m.sort_title = escape_tag(trim(tag->value), 1);
 				}
+				else if( strcmp(tag->key, "sort_name") == 0 )
+					m.sort_title = escape_tag(trim(tag->value), 1);
 				// TODO Set Metadata sort title.
 				else if( strcmp(tag->key, "genre") == 0 )
 					m.genre = escape_tag(trim(tag->value), 1);
