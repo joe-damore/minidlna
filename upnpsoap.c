@@ -645,7 +645,7 @@ parse_sort_criteria(char *sortCriteria, int *error)
 		}
 		else if( strcasecmp(item, "dc:title") == 0 )
 		{
-			strcatf(&str, "d.TITLE COLLATE naturalsort");
+			strcatf(&str, "case when d.SORT_TITLE IS NULL then d.TITLE else d.SORT_TITLE end COLLATE naturalsort");
 			title_sorted = 1;
 		}
 		else if( strcasecmp(item, "dc:date") == 0 )
@@ -1881,7 +1881,7 @@ SearchContentDirectory(struct upnphttp * h, const char * action)
 		if ( SortCriteria )
 			orderBy = parse_sort_criteria(SortCriteria, &ret);
 		else
-			asprintf(&orderBy, "order by d.TITLE COLLATE naturalsort");
+			asprintf(&orderBy, "order by case when d.SORT_TITLE IS NULL then d.TITLE else d.SORT_TITLE end COLLATE naturalsort");
 
 	/* If it's a DLNA client, return an error for bad sort criteria */
 	if( ret < 0 && ((args.flags & FLAG_DLNA) || GETFLAG(DLNA_STRICT_MASK)) )
