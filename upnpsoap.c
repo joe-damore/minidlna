@@ -688,7 +688,7 @@ parse_sort_criteria(char *sortCriteria, int *error)
 	}
 	/* Add a "tiebreaker" sort order */
 	if( !title_sorted )
-		strcatf(&str, ", TITLE COLLATE naturalsort ASC");
+		strcatf(&str, ", case when SORT_TITLE IS NULL then TITLE else SORT_TITLE end COLLATE naturalsort ASC");
 
 	if( force_sort_criteria )
 		free(sortCriteria);
