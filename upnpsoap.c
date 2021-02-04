@@ -645,7 +645,7 @@ parse_sort_criteria(char *sortCriteria, int *error)
 		}
 		else if( strcasecmp(item, "dc:title") == 0 )
 		{
-			strcatf(&str, "case when d.SORT_TITLE IS NULL then d.TITLE else d.SORT_TITLE end COLLATE naturalsort");
+			strcatf(&str, "case when d.SORT_TITLE IS NULL then d.TITLE else d.SORT_TITLE end");
 			title_sorted = 1;
 		}
 		else if( strcasecmp(item, "dc:date") == 0 )
@@ -688,7 +688,7 @@ parse_sort_criteria(char *sortCriteria, int *error)
 	}
 	/* Add a "tiebreaker" sort order */
 	if( !title_sorted )
-		strcatf(&str, ", case when SORT_TITLE IS NULL then TITLE else SORT_TITLE end COLLATE naturalsort ASC");
+		strcatf(&str, ", case when SORT_TITLE IS NULL then TITLE else SORT_TITLE end ASC");
 
 	if( force_sort_criteria )
 		free(sortCriteria);
@@ -1421,14 +1421,14 @@ BrowseContentDirectory(struct upnphttp * h, const char * action)
 			if( strncmp(ObjectID, MUSIC_PLIST_ID, strlen(MUSIC_PLIST_ID)) == 0 )
 			{
 				if( strcmp(ObjectID, MUSIC_PLIST_ID) == 0 )
-					ret = xasprintf(&orderBy, "order by case when d.SORT_TITLE IS NULL then d.TITLE else d.SORT_TITLE end COLLATE naturalsort");
+					ret = xasprintf(&orderBy, "order by case when d.SORT_TITLE IS NULL then d.TITLE else d.SORT_TITLE end");
 				else
 					ret = xasprintf(&orderBy, "order by length(OBJECT_ID), OBJECT_ID");
 			}
 			else if( args.flags & FLAG_FORCE_SORT )
 			{
 				__SORT_LIMIT
-				ret = xasprintf(&orderBy, "order by o.CLASS, d.DISC, d.TRACK, case when d.SORT_TITLE IS NULL then d.TITLE else d.SORT_TITLE end COLLATE naturalsort");
+				ret = xasprintf(&orderBy, "order by o.CLASS, d.DISC, d.TRACK, case when d.SORT_TITLE IS NULL then d.TITLE else d.SORT_TITLE end");
 			}
 			/* LG TV ordering bug */
 			else if( args.client == ELGDevice )
@@ -1881,7 +1881,7 @@ SearchContentDirectory(struct upnphttp * h, const char * action)
 		if ( SortCriteria )
 			orderBy = parse_sort_criteria(SortCriteria, &ret);
 		else
-			asprintf(&orderBy, "order by case when d.SORT_TITLE IS NULL then d.TITLE else d.SORT_TITLE end COLLATE naturalsort");
+			asprintf(&orderBy, "order by case when d.SORT_TITLE IS NULL then d.TITLE else d.SORT_TITLE end");
 
 	/* If it's a DLNA client, return an error for bad sort criteria */
 	if( ret < 0 && ((args.flags & FLAG_DLNA) || GETFLAG(DLNA_STRICT_MASK)) )
